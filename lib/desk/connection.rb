@@ -24,14 +24,7 @@ module Desk
         builder.use Faraday::Request::UrlEncoded
         builder.use Faraday::Response::RaiseHttp4xx
         builder.use FaradayMiddleware::Deashify unless raw
-        unless raw
-          case format.to_s.downcase
-          when 'json'
-            builder.use Faraday::Response::ParseJson
-          when 'xml'
-            builder.use Faraday::Response::ParseXml
-          end
-        end
+        builder.use Faraday::Response::ParseJson, :content_type => 'application/json'
         builder.use Faraday::Response::RaiseHttp5xx
         builder.adapter(adapter)
       end
